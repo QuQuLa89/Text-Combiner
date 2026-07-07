@@ -5,20 +5,27 @@ dist-electron
 release
 *.local
 *.tsbuildinfo
+.vite
+.eslintcache
+coverage
 
 # Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
+*.swp
+*.swo
 
 # OS
 .DS_Store
 Thumbs.db
+Desktop.ini
 
 # Env / secrets
 .env
 .env.*
 !.env.example
+*.pem
 
 # Logs
 *.log
