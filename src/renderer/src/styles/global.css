@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    @apply bg-bg-primary text-text-primary font-sans;
+    font-size: 14px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  textarea,
+  input {
+    user-select: text;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #45474e;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #55575f;
+  }
+}
+
+@layer utilities {
+  .no-drag {
+    -webkit-app-region: no-drag;
+  }
+}
