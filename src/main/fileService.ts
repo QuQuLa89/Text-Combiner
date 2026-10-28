@@ -99,7 +99,7 @@ export async function renameTextFile(
   const oldTarget = resolveSafePath(folderPath, oldName)
   const newTarget = resolveSafePath(folderPath, finalNewName)
 
-  if (oldTarget !== newTarget) {
+  if (oldTarget.toLowerCase() !== newTarget.toLowerCase()) {
     const exists = await fs
       .access(newTarget)
       .then(() => true)

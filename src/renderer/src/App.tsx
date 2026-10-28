@@ -105,6 +105,10 @@ export default function App(): JSX.Element {
   const openFile = useCallback(
     async (name: string) => {
       if (!workspacePath || name === activeName) return
+      if (autosaveTimer.current) {
+        clearTimeout(autosaveTimer.current)
+        autosaveTimer.current = undefined
+      }
       if (dirty) await saveActive()
       const content = await window.api.readFile(workspacePath, name)
       setActiveName(name)
@@ -146,6 +150,11 @@ export default function App(): JSX.Element {
   const handleConfirmCreate = useCallback(
     async (name: string) => {
       if (!workspacePath) return
+      if (autosaveTimer.current) {
+        clearTimeout(autosaveTimer.current)
+        autosaveTimer.current = undefined
+      }
+      if (dirty) await saveActive()
       const result = await window.api.createFile(workspacePath, name)
       if (result.ok) {
         await refresh()
@@ -157,7 +166,7 @@ export default function App(): JSX.Element {
         setStatus({ message: result.message, tone: 'error' })
       }
     },
-    [workspacePath, refresh]
+    [workspacePath, dirty, saveActive, refresh]
   )
 
   const handleRenameSubmit = useCallback(
@@ -186,6 +195,10 @@ export default function App(): JSX.Element {
       if (!workspacePath) return
       const confirmed = window.confirm(`Move "${name}" to the Trash?`)
       if (!confirmed) return
+      if (autosaveTimer.current) {
+        clearTimeout(autosaveTimer.current)
+        autosaveTimer.current = undefined
+      }
       const result = await window.api.deleteFile(workspacePath, name)
       if (result.ok) {
         await refresh()
