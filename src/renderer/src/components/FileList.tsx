@@ -29,11 +29,23 @@ function InlineNameInput({
 }): JSX.Element {
   const [value, setValue] = useState(initialValue)
   const inputRef = useRef<HTMLInputElement>(null)
+  const submittedRef = useRef(false)
 
   useEffect(() => {
     inputRef.current?.focus()
     inputRef.current?.select()
   }, [])
+
+  const handleFinish = (): void => {
+    if (submittedRef.current) return
+    submittedRef.current = true
+    const trimmed = value.trim()
+    if (trimmed) {
+      onSubmit(trimmed)
+    } else {
+      onCancel()
+    }
+  }
 
   return (
     <input
@@ -41,14 +53,17 @@ function InlineNameInput({
       value={value}
       placeholder={placeholder}
       onChange={(e) => setValue(e.target.value)}
-      onBlur={() => (value.trim() ? onSubmit(value.trim()) : onCancel())}
+      onBlur={handleFinish}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           e.preventDefault()
-          value.trim() ? onSubmit(value.trim()) : onCancel()
+          handleFinish()
         } else if (e.key === 'Escape') {
           e.preventDefault()
-          onCancel()
+          if (!submittedRef.current) {
+            submittedRef.current = true
+            onCancel()
+          }
         }
       }}
       className="w-full rounded border border-accent bg-bg-tertiary px-1.5 py-0.5 text-sm text-text-primary outline-none"
